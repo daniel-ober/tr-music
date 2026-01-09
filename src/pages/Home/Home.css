@@ -1,5 +1,7 @@
+/* src/pages/Home/Home.css */
 @import "../../styles/theme.css";
 
+/* Keep Home page styles minimal to avoid duplicating StageHero.css */
 body {
   margin: 0;
   background: var(--bg-black);

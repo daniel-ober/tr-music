@@ -1,3 +1,4 @@
+// src/components/layout/Navbar.jsx
 import { useEffect, useMemo, useState } from "react";
 import "./Navbar.css";
 
@@ -18,7 +19,9 @@ export default function Navbar() {
   // Lock body scroll on mobile menu
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => (document.body.style.overflow = "");
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   // Close on resize up
@@ -41,8 +44,11 @@ export default function Navbar() {
     if (!el) return;
 
     const navH =
-      parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) ||
-      84;
+      Number(
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--nav-h")
+          .replace("px", "")
+      ) || 92;
 
     const y = el.getBoundingClientRect().top + window.scrollY - navH;
     window.scrollTo({ top: y, behavior: "smooth" });
@@ -53,10 +59,7 @@ export default function Navbar() {
       <div className="navbar-inner">
         <button
           className="navbar-mark"
-          onClick={() => {
-            setOpen(false);
-            scrollToId("home");
-          }}
+          onClick={() => scrollToId("home")}
           aria-label="Go to home"
           type="button"
         >
@@ -69,9 +72,9 @@ export default function Navbar() {
             {items.map((item) => (
               <li key={item.id}>
                 <button
-                  type="button"
                   className="navbar-link-btn"
                   onClick={() => scrollToId(item.id)}
+                  type="button"
                 >
                   {item.label}
                 </button>
@@ -80,11 +83,11 @@ export default function Navbar() {
           </ul>
 
           <button
-            type="button"
             className={`navbar-burger ${open ? "open" : ""}`}
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
+            type="button"
           >
             <span className="burger-lines" aria-hidden="true">
               <span />
@@ -96,31 +99,31 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* Mobile Nav Sheet (starts UNDER navbar so close button stays visible) */}
-      <div className={`navsheet ${open ? "open" : ""}`} role="dialog" aria-modal="true">
+      {/* Mobile Nav Sheet */}
+      <div
+        className={`navsheet ${open ? "open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
+      >
         <button
-          type="button"
           className="navsheet-backdrop"
           onClick={() => setOpen(false)}
           aria-label="Close menu"
+          type="button"
         />
 
-        <div className="navsheet-panel" role="document">
-          <div className="navsheet-header">
-            <div className="navsheet-title">Tawnya Reynolds</div>
-            <div className="navsheet-sub">Songwriter · Nashville</div>
-          </div>
-
+        <div className="navsheet-panel">
           <div className="navsheet-links">
             {items.map((item) => (
               <button
-                type="button"
                 key={item.id}
                 className="navsheet-link"
                 onClick={() => {
                   setOpen(false);
                   scrollToId(item.id);
                 }}
+                type="button"
               >
                 {item.label}
               </button>

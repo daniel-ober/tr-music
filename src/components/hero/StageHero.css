@@ -1,16 +1,17 @@
 /* src/components/hero/StageHero.css */
+@import "../../styles/theme.css";
 
 .stage-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--nav-h, 92px));
   width: 100%;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  /* space for fixed navbar */
-  padding-top: var(--nav-h);
+  /* ✅ IMPORTANT: SiteShell already offsets for navbar.
+     Do NOT add padding-top here. */
 }
 
 /* Center haze behind composed content */
@@ -204,47 +205,6 @@
   );
 }
 
-/* Scroll hint */
-.stage-scrollhint {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  width: 26px;
-  height: 44px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 8px;
-  opacity: 0.7;
-}
-
-.stage-scrollhint span {
-  width: 4px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.62);
-  animation: scrollDot 1.4s infinite ease-in-out;
-}
-
-@keyframes scrollDot {
-  0% {
-    transform: translateY(0);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translateY(10px);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 0.2;
-  }
-}
-
 /* Mobile */
 @media (max-width: 860px) {
   .stage-hero {
@@ -256,8 +216,6 @@
     padding: 1.05rem 0 3.5rem;
   }
 
-  /* ✅ This is the key fix you asked for:
-     push the image DOWN so it sits more “behind” the name/copy block */
   .stage-left {
     padding-top: 22px;
   }

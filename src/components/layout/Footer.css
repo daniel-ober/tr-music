@@ -1,7 +1,7 @@
 /* src/components/layout/Footer.css */
+@import "../../styles/theme.css";
 
 .site-footer {
-  /* This is the “stick to bottom” piece when content is short */
   margin-top: auto;
 
   padding: 2.25rem 0 2.1rem;
@@ -65,8 +65,8 @@
   background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.7);
 
-  transition: transform 0.18s ease, background 0.18s ease, border 0.18s ease,
-    color 0.18s ease;
+  transition: transform 0.18s ease, background 0.18s ease,
+    border 0.18s ease, color 0.18s ease;
 }
 
 .footer-icon:hover {

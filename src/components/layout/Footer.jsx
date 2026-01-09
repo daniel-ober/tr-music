@@ -1,3 +1,4 @@
+// src/components/layout/Footer.jsx
 import "./Footer.css";
 
 function IconInstagram(props) {
@@ -61,8 +62,9 @@ export default function Footer() {
     if (!el) return;
 
     const navH =
-      parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) ||
-      84;
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--nav-h")
+      ) || 92;
 
     const y = el.getBoundingClientRect().top + window.scrollY - navH;
     window.scrollTo({ top: y, behavior: "smooth" });
@@ -80,7 +82,6 @@ export default function Footer() {
           </div>
 
           <div className="footer-social" aria-label="Social links">
-            {/* Replace # with real URLs when ready */}
             <a className="footer-icon" href="#" aria-label="Instagram">
               <IconInstagram />
             </a>

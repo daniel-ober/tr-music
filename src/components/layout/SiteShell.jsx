@@ -1,3 +1,4 @@
+// src/components/layout/SiteShell.jsx
 import "./SiteShell.css";
 import stageImg from "../../assets/images/hero/tr-stage.png";
 import Footer from "./Footer";

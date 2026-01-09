@@ -1,4 +1,5 @@
 /* src/components/layout/SiteShell.css */
+@import "../../styles/theme.css";
 
 .site-shell {
   position: relative;
@@ -6,7 +7,6 @@
   width: 100%;
   overflow-x: hidden;
 
-  /* footer-stick foundation */
   display: flex;
   flex-direction: column;
 }
@@ -16,11 +16,8 @@
   position: fixed;
   inset: 0;
   z-index: 0;
-
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-
   filter: grayscale(100%) brightness(0.32) contrast(1.12);
 }
 
@@ -52,19 +49,15 @@
   pointer-events: none;
 }
 
-/* Foreground app content */
+/* Foreground app */
 .site-content {
   position: relative;
   z-index: 1;
 
-  /* take remaining height so footer can pin on short pages */
   flex: 1;
 
-  /* global protection so content never hides behind fixed navbar */
-  padding-top: var(--nav-h);
+  /* ✅ single source of truth: offset all page content below fixed navbar */
+  padding-top: var(--nav-h, 92px);
 
-  /* allow pages + footer to stack naturally */
-  display: flex;
-  flex-direction: column;
   min-height: 0;
 }
