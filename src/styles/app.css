@@ -1,0 +1,907 @@
+@import "../../styles/theme.css";
+
+/* ----------------------------
+   THEME (kept from your theme.css)
+----------------------------- */
+:root {
+  /* Core palette */
+  --bg-black: #0e0e0e;
+  --bg-charcoal: #151515;
+  --bg-stage: #0b0b0b;
+
+  --text-primary: #f2f2f2;
+  --text-muted: #b8b8b8;
+
+  /* Nashville warmth */
+  --accent-amber: #c9a25d;
+  --accent-soft: rgba(201, 162, 93, 0.25);
+
+  /* UI */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --font-heading: "Georgia", "Times New Roman", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* Single source of truth for fixed navbar height */
+  --nav-h: 92px;
+}
+
+/* ----------------------------
+   GLOBAL / BODY / ROOT CANVAS
+----------------------------- */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-black);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* Ensure React root fills the viewport */
+#root {
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Fixed background behind entire app (fallback / if you still want this style) */
+#root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url("/assets/stage-bg.jpg"); /* <-- update if used */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+}
+
+#root::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+      60% 70% at 50% 45%,
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0.86) 70%
+    ),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.78));
+  pointer-events: none;
+}
+
+/* ----------------------------
+   SITE SHELL (footer sticks)
+----------------------------- */
+.site-shell {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+
+  /* ✅ footer-stick foundation */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Full app background canvas (if you are using .site-bg element) */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%) brightness(0.32) contrast(1.12);
+}
+
+/* Dark stage vignette */
+.site-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 46% 44%,
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 0, 0, 0.82) 58%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+/* Film grain */
+.site-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Foreground app */
+.site-content {
+  position: relative;
+  z-index: 1;
+
+  /* ✅ take remaining height so footer pins on short pages */
+  flex: 1;
+
+  /* ✅ prevent content under fixed navbar */
+  padding-top: var(--nav-h);
+
+  min-height: 0;
+}
+
+/* ----------------------------
+   NAVBAR (buffer added, desktop tightened, mobile close always visible)
+----------------------------- */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 300;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.92),
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.15)
+  );
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.navbar.is-open {
+  z-index: 350;
+}
+
+.navbar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  /* ✅ a bit more height buffer + slightly tighter desktop */
+  padding: 1.05rem var(--page-pad);
+
+  min-height: var(--nav-h);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Brand mark */
+.navbar-mark {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  gap: 0.22rem;
+}
+
+.navbar-mark-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.navbar-mark-sub {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Right side */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+/* Desktop links */
+.navbar-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2.15rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-link-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 0.4rem 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.navbar-link-btn:hover {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.navbar-link-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+  transition: width 0.25s ease;
+  opacity: 0.9;
+}
+
+.navbar-link-btn:hover::after {
+  width: 100%;
+}
+
+/* Burger */
+.navbar-burger {
+  display: none;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, border 0.18s ease;
+
+  /* ✅ ensures it stays clickable above navsheet */
+  position: relative;
+  z-index: 400;
+}
+
+.navbar-burger:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.68);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.burger-lines {
+  display: grid;
+  gap: 5px;
+}
+
+.burger-lines span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 999px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.burger-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Animate burger into X */
+.navbar-burger.open .burger-lines span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.navbar-burger.open .burger-lines span:nth-child(2) {
+  opacity: 0;
+}
+.navbar-burger.open .burger-lines span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile overlay (starts UNDER navbar so Close is always visible) */
+.navsheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  z-index: 320;
+
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.navsheet.open {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.navsheet-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.92);
+  cursor: pointer;
+}
+
+.navsheet-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(520px, 92vw);
+  height: 100%;
+
+  background: #0b0b0b;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+
+  transform: translateX(18px);
+  transition: transform 0.22s ease;
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 1.25rem 1.15rem;
+}
+
+.navsheet.open .navsheet-panel {
+  transform: translateX(0);
+}
+
+.navsheet-header {
+  padding: 0.4rem 0.35rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navsheet-title {
+  font-family: var(--font-heading);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.95rem;
+}
+
+.navsheet-sub {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.navsheet-links {
+  padding: 1.1rem 0.35rem 0;
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+}
+
+.navsheet-link {
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, border 0.18s ease;
+}
+
+.navsheet-link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.navsheet-footer {
+  padding: 1.2rem 0.35rem 0.35rem;
+}
+
+.navsheet-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  margin-bottom: 0.9rem;
+}
+
+.navsheet-note {
+  color: rgba(255, 255, 255, 0.56);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  :root {
+    --nav-h: 88px;
+  }
+
+  .navbar-inner {
+    padding: 0.95rem var(--page-pad);
+    gap: 1.25rem;
+  }
+
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-burger {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 420px) {
+  .navbar-mark-title {
+    font-size: 0.9rem;
+  }
+  .navbar-mark-sub {
+    font-size: 0.66rem;
+  }
+}
+
+/* ----------------------------
+   FOOTER (sticky via SiteShell, icons + sitemap styles)
+----------------------------- */
+.site-footer {
+  margin-top: 0; /* ✅ let layout handle spacing */
+  padding: 2.25rem 0 2.1rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+  display: grid;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.footer-top {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+  justify-items: center;
+}
+
+.footer-brand {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.footer-name {
+  font-family: var(--font-heading);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.footer-sub {
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer-social {
+  display: flex;
+  gap: 0.85rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.18s ease, background 0.18s ease, border 0.18s ease,
+    color 0.18s ease;
+}
+
+.footer-icon:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.footer-mid {
+  display: grid;
+  justify-items: center;
+}
+
+.footer-sitemap {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-sitemap button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 0.25rem 0.15rem;
+  transition: color 0.18s ease;
+}
+
+.footer-sitemap button:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer-dot {
+  opacity: 0.35;
+}
+
+.footer-legal-link {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.footer-legal-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (min-width: 900px) {
+  .footer-inner {
+    text-align: left;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr auto;
+    justify-items: start;
+  }
+
+  .footer-social {
+    justify-content: flex-end;
+  }
+
+  .footer-mid,
+  .footer-legal {
+    justify-content: flex-start;
+  }
+}
+
+/* ----------------------------
+   STAGE HERO (mobile portrait pulled DOWN)
+----------------------------- */
+.stage-hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* ✅ use nav height variable */
+  padding-top: var(--nav-h);
+}
+
+/* Center haze behind composed content */
+.stage-haze {
+  position: absolute;
+  z-index: 1;
+  width: min(1200px, 92vw);
+  height: min(560px, 64vh);
+  border-radius: 26px;
+  background: radial-gradient(
+    circle at 45% 45%,
+    rgba(255, 255, 255, 0.06),
+    rgba(201, 162, 93, 0.03) 40%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(2px);
+  opacity: 0.9;
+}
+
+/* Foreground layout */
+.stage-inner {
+  position: relative;
+  z-index: 2;
+  width: min(1240px, 92vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.stage-left {
+  display: flex;
+  justify-content: center;
+}
+
+.stage-portrait-wrap {
+  position: relative;
+  width: min(560px, 46vw);
+  max-width: 560px;
+  will-change: transform;
+}
+
+.stage-foreground {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(100%) contrast(1.18);
+  user-select: none;
+  pointer-events: none;
+}
+
+.stage-portrait-shadow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 40% 45%,
+    rgba(255, 255, 255, 0.08),
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Right copy */
+.stage-right {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.stage-copy {
+  max-width: 520px;
+}
+
+.stage-kicker {
+  font-size: 0.74rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.85rem;
+}
+
+.stage-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 3.8vw, 3.25rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.05;
+}
+
+.stage-blurb {
+  margin: 1.05rem 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.65;
+  font-size: 1.02rem;
+}
+
+/* Ticket CTAs */
+.stage-cta {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.ticket-btn {
+  position: relative;
+  min-width: 220px;
+  padding: 0.95rem 1.05rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.03)
+  );
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.18s ease, border 0.18s ease, background 0.18s ease;
+  overflow: hidden;
+}
+
+.ticket-btn::before,
+.ticket-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  opacity: 0.65;
+}
+
+.ticket-btn::before {
+  left: -10px;
+}
+
+.ticket-btn::after {
+  right: -10px;
+}
+
+.ticket-top {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ticket-sub {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.ticket-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(201, 162, 93, 0.28);
+}
+
+.ticket-primary {
+  border-color: rgba(201, 162, 93, 0.35);
+}
+
+/* Quote */
+.stage-quote {
+  margin-top: 1.8rem;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 0.9rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.62);
+  font-style: italic;
+}
+
+.stage-quote-line {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.1),
+    rgba(201, 162, 93, 0.55),
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+/* Scroll hint */
+.stage-scrollhint {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 26px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8px;
+  opacity: 0.7;
+}
+
+.stage-scrollhint span {
+  width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  animation: scrollDot 1.4s infinite ease-in-out;
+}
+
+@keyframes scrollDot {
+  0% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+}
+
+/* Mobile */
+@media (max-width: 860px) {
+  .stage-hero {
+    /* ✅ more runway so the portrait sits LOWER behind the name area */
+    padding-top: calc(var(--nav-h) + 40px);
+    align-items: flex-start;
+  }
+
+  /* ✅ extra spacing ABOVE the portrait block to push image downward */
+  .stage-left {
+    padding-top: 22px;
+  }
+
+  .stage-inner {
+    grid-template-columns: 1fr;
+    padding: 1.05rem 0 3.5rem;
+  }
+
+  .stage-portrait-wrap {
+    width: min(560px, 90vw);
+  }
+
+  .stage-right {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .stage-copy {
+    max-width: 560px;
+  }
+
+  .stage-cta {
+    justify-content: center;
+  }
+
+  .ticket-btn {
+    width: min(520px, 88vw);
+    text-align: center;
+  }
+
+  .stage-quote {
+    grid-template-columns: 1fr;
+  }
+
+  .stage-quote-line {
+    width: 120px;
+    margin: 0 auto;
+  }
+}

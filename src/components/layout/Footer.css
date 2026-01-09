@@ -1,0 +1,153 @@
+/* src/components/layout/Footer.css */
+
+.site-footer {
+  /* This is the “stick to bottom” piece when content is short */
+  margin-top: auto;
+
+  padding: 2.25rem 0 2.1rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+
+  display: grid;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.footer-top {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+  justify-items: center;
+}
+
+.footer-brand {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.footer-name {
+  font-family: var(--font-heading);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.footer-sub {
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer-social {
+  display: flex;
+  gap: 0.85rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+
+  transition: transform 0.18s ease, background 0.18s ease, border 0.18s ease,
+    color 0.18s ease;
+}
+
+.footer-icon:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.footer-mid {
+  display: grid;
+  justify-items: center;
+}
+
+.footer-sitemap {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-sitemap button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+
+  padding: 0.25rem 0.15rem;
+  transition: color 0.18s ease;
+}
+
+.footer-sitemap button:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer-dot {
+  opacity: 0.35;
+}
+
+.footer-legal-link {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.footer-legal-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (min-width: 900px) {
+  .footer-inner {
+    text-align: left;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr auto;
+    justify-items: start;
+  }
+
+  .footer-social {
+    justify-content: flex-end;
+  }
+
+  .footer-mid,
+  .footer-legal {
+    justify-content: flex-start;
+  }
+}

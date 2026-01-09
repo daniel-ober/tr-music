@@ -1,0 +1,70 @@
+/* src/components/layout/SiteShell.css */
+
+.site-shell {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+
+  /* footer-stick foundation */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Full app background canvas */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: grayscale(100%) brightness(0.32) contrast(1.12);
+}
+
+/* Dark stage vignette */
+.site-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 46% 44%,
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 0, 0, 0.82) 58%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+/* Film grain */
+.site-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Foreground app content */
+.site-content {
+  position: relative;
+  z-index: 1;
+
+  /* take remaining height so footer can pin on short pages */
+  flex: 1;
+
+  /* global protection so content never hides behind fixed navbar */
+  padding-top: var(--nav-h);
+
+  /* allow pages + footer to stack naturally */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}

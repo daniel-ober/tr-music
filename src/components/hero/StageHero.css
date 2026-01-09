@@ -1,63 +1,22 @@
-@import "../../styles/theme.css";
+/* src/components/hero/StageHero.css */
 
 .stage-hero {
   position: relative;
   min-height: 100vh;
   width: 100%;
-  overflow: hidden;
-  background: #070707;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 76px; /* space for navbar */
+
+  /* space for fixed navbar */
+  padding-top: var(--nav-h);
 }
 
-/* Background system */
-.stage-bg-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
-.stage-backdrop {
-  position: absolute;
-  inset: -30px;
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(100%) brightness(0.32) contrast(1.12) blur(1px);
-  will-change: transform;
-}
-
-.stage-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 46% 44%,
-    rgba(255, 255, 255, 0.06),
-    rgba(0, 0, 0, 0.80) 58%,
-    rgba(0, 0, 0, 0.92) 100%
-  );
-}
-
-.stage-grain {
-  position: absolute;
-  inset: 0;
-  opacity: 0.12;
-  background-image: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.02) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
-/* Center haze behind composed content (subtle “stage light”) */
+/* Center haze behind composed content */
 .stage-haze {
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   width: min(1200px, 92vw);
   height: min(560px, 64vh);
   border-radius: 26px;
@@ -65,7 +24,7 @@
     circle at 45% 45%,
     rgba(255, 255, 255, 0.06),
     rgba(201, 162, 93, 0.03) 40%,
-    rgba(0, 0, 0, 0.0) 70%
+    rgba(0, 0, 0, 0) 70%
   );
   filter: blur(2px);
   opacity: 0.9;
@@ -74,8 +33,9 @@
 /* Foreground layout */
 .stage-inner {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   width: min(1240px, 92vw);
+
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(1.25rem, 4vw, 3rem);
@@ -129,7 +89,7 @@
   font-size: 0.74rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 0.85rem;
 }
 
@@ -150,7 +110,7 @@
   font-size: 1.02rem;
 }
 
-/* Ticket CTAs (replaces generic pills) */
+/* Ticket CTAs */
 .stage-cta {
   margin-top: 1.6rem;
   display: flex;
@@ -158,52 +118,46 @@
   flex-wrap: wrap;
 }
 
-/* “ticket” button */
 .ticket-btn {
   position: relative;
   min-width: 220px;
   padding: 0.95rem 1.05rem;
   border-radius: 16px;
+
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.06),
     rgba(255, 255, 255, 0.03)
   );
+
   color: rgba(255, 255, 255, 0.92);
   cursor: pointer;
   text-align: left;
+
   transition: transform 0.18s ease, border 0.18s ease, background 0.18s ease;
   overflow: hidden;
 }
 
-/* subtle “perforation” hint */
-.ticket-btn::before {
-  content: "";
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.9);
-  transform: translateY(-50%);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.10);
-  opacity: 0.65;
-}
-
+.ticket-btn::before,
 .ticket-btn::after {
   content: "";
   position: absolute;
-  right: -10px;
   top: 50%;
   width: 22px;
   height: 22px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.9);
   transform: translateY(-50%);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.10);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
   opacity: 0.65;
+}
+
+.ticket-btn::before {
+  left: -10px;
+}
+.ticket-btn::after {
+  right: -10px;
 }
 
 .ticket-top {
@@ -218,28 +172,18 @@
   margin-top: 0.35rem;
   font-size: 0.92rem;
   color: rgba(255, 255, 255, 0.62);
-  letter-spacing: 0.02em;
 }
 
 .ticket-btn:hover {
   transform: translateY(-1px);
   border-color: rgba(201, 162, 93, 0.28);
-  background: linear-gradient(
-    to bottom,
-    rgba(201, 162, 93, 0.10),
-    rgba(255, 255, 255, 0.03)
-  );
 }
 
 .ticket-primary {
   border-color: rgba(201, 162, 93, 0.35);
-  background: linear-gradient(
-    to bottom,
-    rgba(201, 162, 93, 0.14),
-    rgba(255, 255, 255, 0.03)
-  );
 }
 
+/* Quote */
 .stage-quote {
   margin-top: 1.8rem;
   display: grid;
@@ -254,11 +198,10 @@
   height: 1px;
   background: linear-gradient(
     to right,
-    rgba(255, 255, 255, 0.10),
+    rgba(255, 255, 255, 0.1),
     rgba(201, 162, 93, 0.55),
-    rgba(255, 255, 255, 0.10)
+    rgba(255, 255, 255, 0.1)
   );
-  width: 100%;
 }
 
 /* Scroll hint */
@@ -267,7 +210,7 @@
   bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 4;
+  z-index: 3;
   width: 26px;
   height: 44px;
   border-radius: 999px;
@@ -305,15 +248,7 @@
 /* Mobile */
 @media (max-width: 860px) {
   .stage-hero {
-    padding-top: 72px;
     align-items: flex-start;
-  }
-
-  .stage-haze {
-    width: min(860px, 94vw);
-    height: min(760px, 74vh);
-    border-radius: 22px;
-    opacity: 0.95;
   }
 
   .stage-inner {
@@ -321,13 +256,16 @@
     padding: 1.05rem 0 3.5rem;
   }
 
-  /* Poster-like crop: keep portrait strong but not endless */
-  .stage-portrait-wrap {
-    width: min(560px, 90vw);
-    max-width: 560px;
+  /* ✅ This is the key fix you asked for:
+     push the image DOWN so it sits more “behind” the name/copy block */
+  .stage-left {
+    padding-top: 22px;
   }
 
-  /* Give the copy a cohesive “poster block” feel */
+  .stage-portrait-wrap {
+    width: min(560px, 90vw);
+  }
+
   .stage-right {
     justify-content: center;
     text-align: center;
@@ -335,7 +273,6 @@
 
   .stage-copy {
     max-width: 560px;
-    padding: 0.35rem 0.25rem 0;
   }
 
   .stage-cta {
@@ -344,13 +281,12 @@
 
   .ticket-btn {
     width: min(520px, 88vw);
-    min-width: 0;
     text-align: center;
+    min-width: 0;
   }
 
   .stage-quote {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
   }
 
   .stage-quote-line {
