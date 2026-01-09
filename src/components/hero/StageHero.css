@@ -2,71 +2,359 @@
 
 .stage-hero {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  background: var(--bg-stage);
+  background: #070707;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: 76px; /* space for navbar */
 }
 
-/* Backdrop (parallax layer 1) */
-.stage-backdrop {
+/* Background system */
+.stage-bg-wrap {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(1px) brightness(0.45);
-  transform: scale(1.05);
   z-index: 1;
 }
 
-/* Soft spotlight */
-.stage-spotlight {
+.stage-backdrop {
   position: absolute;
-  width: 520px;
-  height: 520px;
+  inset: -30px;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%) brightness(0.32) contrast(1.12) blur(1px);
+  will-change: transform;
+}
+
+.stage-vignette {
+  position: absolute;
+  inset: 0;
   background: radial-gradient(
-    circle,
-    rgba(201, 162, 93, 0.35),
-    transparent 70%
+    circle at 46% 44%,
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 0, 0, 0.80) 58%,
+    rgba(0, 0, 0, 0.92) 100%
   );
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
 }
 
-/* Foreground artist (parallax layer 2) */
-.stage-foreground {
-  position: relative;
-  max-height: 78vh;
-  z-index: 3;
-  object-fit: contain;
-}
-
-/* Text */
-.stage-text {
+.stage-grain {
   position: absolute;
-  bottom: 12%;
-  text-align: center;
-  z-index: 4;
+  inset: 0;
+  opacity: 0.12;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
 }
 
-.stage-text h1 {
+/* Center haze behind composed content (subtle “stage light”) */
+.stage-haze {
+  position: absolute;
+  z-index: 2;
+  width: min(1200px, 92vw);
+  height: min(560px, 64vh);
+  border-radius: 26px;
+  background: radial-gradient(
+    circle at 45% 45%,
+    rgba(255, 255, 255, 0.06),
+    rgba(201, 162, 93, 0.03) 40%,
+    rgba(0, 0, 0, 0.0) 70%
+  );
+  filter: blur(2px);
+  opacity: 0.9;
+}
+
+/* Foreground layout */
+.stage-inner {
+  position: relative;
+  z-index: 3;
+  width: min(1240px, 92vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.stage-left {
+  display: flex;
+  justify-content: center;
+}
+
+.stage-portrait-wrap {
+  position: relative;
+  width: min(560px, 46vw);
+  max-width: 560px;
+  will-change: transform;
+}
+
+.stage-foreground {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(100%) contrast(1.18);
+  user-select: none;
+  pointer-events: none;
+}
+
+.stage-portrait-shadow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 40% 45%,
+    rgba(255, 255, 255, 0.08),
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Right copy */
+.stage-right {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.stage-copy {
+  max-width: 520px;
+}
+
+.stage-kicker {
+  font-size: 0.74rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.60);
+  margin-bottom: 0.85rem;
+}
+
+.stage-title {
   font-family: var(--font-heading);
-  font-size: 2.4rem;
+  font-size: clamp(2.2rem, 3.8vw, 3.25rem);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin: 0;
   color: var(--text-primary);
+  margin: 0;
+  line-height: 1.05;
 }
 
-.stage-text p {
-  margin-top: 0.75rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.15em;
+.stage-blurb {
+  margin: 1.05rem 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.65;
+  font-size: 1.02rem;
+}
+
+/* Ticket CTAs (replaces generic pills) */
+.stage-cta {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+/* “ticket” button */
+.ticket-btn {
+  position: relative;
+  min-width: 220px;
+  padding: 0.95rem 1.05rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.03)
+  );
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.18s ease, border 0.18s ease, background 0.18s ease;
+  overflow: hidden;
+}
+
+/* subtle “perforation” hint */
+.ticket-btn::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.10);
+  opacity: 0.65;
+}
+
+.ticket-btn::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.10);
+  opacity: 0.65;
+}
+
+.ticket-top {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent-amber);
+}
+
+.ticket-sub {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.62);
+  letter-spacing: 0.02em;
+}
+
+.ticket-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(201, 162, 93, 0.28);
+  background: linear-gradient(
+    to bottom,
+    rgba(201, 162, 93, 0.10),
+    rgba(255, 255, 255, 0.03)
+  );
+}
+
+.ticket-primary {
+  border-color: rgba(201, 162, 93, 0.35);
+  background: linear-gradient(
+    to bottom,
+    rgba(201, 162, 93, 0.14),
+    rgba(255, 255, 255, 0.03)
+  );
+}
+
+.stage-quote {
+  margin-top: 1.8rem;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 0.9rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.62);
+  font-style: italic;
+}
+
+.stage-quote-line {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.10),
+    rgba(201, 162, 93, 0.55),
+    rgba(255, 255, 255, 0.10)
+  );
+  width: 100%;
+}
+
+/* Scroll hint */
+.stage-scrollhint {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  width: 26px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8px;
+  opacity: 0.7;
+}
+
+.stage-scrollhint span {
+  width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  animation: scrollDot 1.4s infinite ease-in-out;
+}
+
+@keyframes scrollDot {
+  0% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+}
+
+/* Mobile */
+@media (max-width: 860px) {
+  .stage-hero {
+    padding-top: 72px;
+    align-items: flex-start;
+  }
+
+  .stage-haze {
+    width: min(860px, 94vw);
+    height: min(760px, 74vh);
+    border-radius: 22px;
+    opacity: 0.95;
+  }
+
+  .stage-inner {
+    grid-template-columns: 1fr;
+    padding: 1.05rem 0 3.5rem;
+  }
+
+  /* Poster-like crop: keep portrait strong but not endless */
+  .stage-portrait-wrap {
+    width: min(560px, 90vw);
+    max-width: 560px;
+  }
+
+  /* Give the copy a cohesive “poster block” feel */
+  .stage-right {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .stage-copy {
+    max-width: 560px;
+    padding: 0.35rem 0.25rem 0;
+  }
+
+  .stage-cta {
+    justify-content: center;
+  }
+
+  .ticket-btn {
+    width: min(520px, 88vw);
+    min-width: 0;
+    text-align: center;
+  }
+
+  .stage-quote {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .stage-quote-line {
+    width: 120px;
+    margin: 0 auto;
+  }
 }
