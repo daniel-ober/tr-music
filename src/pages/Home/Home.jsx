@@ -1,8 +1,12 @@
+import Navbar from "../../components/layout/Navbar";
+import StageHero from "../../components/hero/StageHero";
+import "./Home.css";
+
 export default function Home() {
   return (
-    <div style={{ padding: "4rem", textAlign: "center" }}>
-      <h1>Tawnya Reynolds</h1>
-      <p>Songwriter · Nashville</p>
-    </div>
+    <>
+      <Navbar />
+      <StageHero />
+    </>
   );
 }

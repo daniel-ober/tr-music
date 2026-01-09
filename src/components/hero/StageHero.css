@@ -1,0 +1,72 @@
+@import "../../styles/theme.css";
+
+.stage-hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-stage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Backdrop (parallax layer 1) */
+.stage-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(1px) brightness(0.45);
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+/* Soft spotlight */
+.stage-spotlight {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 162, 93, 0.35),
+    transparent 70%
+  );
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* Foreground artist (parallax layer 2) */
+.stage-foreground {
+  position: relative;
+  max-height: 78vh;
+  z-index: 3;
+  object-fit: contain;
+}
+
+/* Text */
+.stage-text {
+  position: absolute;
+  bottom: 12%;
+  text-align: center;
+  z-index: 4;
+}
+
+.stage-text h1 {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.stage-text p {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-amber);
+}
