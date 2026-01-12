@@ -1,0 +1,7 @@
+:root {
+  /* Navbar height */
+  --nav-h: 86px;
+
+  /* Horizontal page padding used by navbar-inner */
+  --page-pad: clamp(12px, 2vw, 28px);
+}

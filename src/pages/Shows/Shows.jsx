@@ -20,19 +20,16 @@ export default function Shows() {
           <p className="shows-sub">Upcoming dates, tickets, and locations.</p>
         </header>
 
-        <div className="shows-table">
-          <div className="shows-row shows-row--head">
-            <div className="shows-cell">Date</div>
-            <div className="shows-cell">Event</div>
-            <div className="shows-cell">Location</div>
-          </div>
-
-          {SHOWS.map((s) => (
-            <div key={`${s.date}-${s.location}`} className="shows-row">
-              <div className="shows-cell shows-date">{s.date}</div>
-              <div className="shows-cell">{s.event}</div>
-              <div className="shows-cell">{s.location}</div>
-            </div>
+        <div className="shows-list">
+          {SHOWS.map((show) => (
+            <article
+              key={`${show.date}-${show.location}`}
+              className="show-card"
+            >
+              <div className="show-date">{show.date}</div>
+              <div className="show-event">{show.event}</div>
+              <div className="show-location">{show.location}</div>
+            </article>
           ))}
         </div>
 

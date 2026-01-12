@@ -1,9 +1,10 @@
-// src/components/hero/StageHero.jsx
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./StageHero.css";
 import mainImg from "../../assets/images/hero/tr-main.png";
 
 export default function StageHero() {
+  const navigate = useNavigate();
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
@@ -22,8 +23,6 @@ export default function StageHero() {
     };
   }, []);
 
-  // ✅ DO NOT set inline transform (it overrides your CSS crop rules).
-  // Instead, feed parallax into a CSS variable that CSS composes with offsets.
   const styleVars = useMemo(() => {
     const fg = Math.min(scrollY * 0.18, 95);
     const parallaxPx = fg * -0.15;
@@ -61,12 +60,20 @@ export default function StageHero() {
             </p>
 
             <div className="stage-cta">
-              <button className="ticket-btn ticket-primary" type="button">
+              <button
+                className="ticket-btn ticket-primary"
+                type="button"
+                onClick={() => navigate("/music")}
+              >
                 <span className="ticket-top">Listen</span>
                 <span className="ticket-sub">Featured tracks</span>
               </button>
 
-              <button className="ticket-btn" type="button">
+              <button
+                className="ticket-btn"
+                type="button"
+                onClick={() => navigate("/shows")}
+              >
                 <span className="ticket-top">Upcoming Shows</span>
                 <span className="ticket-sub">Calendar & tickets</span>
               </button>

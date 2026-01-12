@@ -146,34 +146,6 @@
   margin-top: auto;
 }
 
-/* ===== Route/Page transitions ===== */
-.page {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 220ms ease, transform 220ms ease;
-  will-change: opacity, transform;
-}
-
-.page.is-entering {
-  opacity: 0;
-  transform: translateY(6px);
-}
-
-.page.is-leaving {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .page,
-  .page.is-entering,
-  .page.is-leaving {
-    transition: none;
-    transform: none;
-  }
-}
-
 /* ============================
    PAGE TRANSITIONS
 ============================ */

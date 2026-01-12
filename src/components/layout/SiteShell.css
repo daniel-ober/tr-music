@@ -1,129 +1,47 @@
 /* src/components/layout/SiteShell.css */
 
-:root {
-  --route-fade-ms: 220ms;
-  --route-ease: ease;
-}
-
-.site-shell {
-  position: relative;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* =========================
-   Background layers
-   ========================= */
-
-.site-bg-img {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-
-  background-position: center top;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  will-change: transform;
-  transform-origin: center top;
-
-  filter: saturate(1.02) contrast(1.02);
-}
-
-.site-bg-glow {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-
-  background: radial-gradient(
-      800px 500px at 50% 20%,
-      rgba(255, 255, 255, 0.08),
-      rgba(0, 0, 0, 0)
-    ),
-    radial-gradient(
-      900px 600px at 30% 60%,
-      rgba(120, 160, 255, 0.06),
-      rgba(0, 0, 0, 0)
-    );
-}
-
-.site-bg-vignette {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-
-  background: radial-gradient(
-    1200px 800px at 50% 30%,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.65) 100%
-  );
-}
-
-/* =========================
-   Foreground layout
-   ========================= */
-
+/* Foreground sits above background layers */
 .site-foreground {
   position: relative;
   z-index: 5;
-  display: flex;
   min-height: 100vh;
+  display: flex;
   flex-direction: column;
 }
 
+/* ✅ Only ONE place accounts for navbar height */
 .site-main {
-  width: 100%;
   flex: 1;
-}
-
-.site-footer {
   width: 100%;
-}
-
-/* =========================
-   Route transitions (no flicker)
-   ========================= */
-
-/*
-  Key idea:
-  - The route content always lives inside .route-layer
-  - We animate via transitions (not keyframe-on-mount)
-  - On navigation: set .is-hidden (opacity 0), then swap content, then set .is-visible
-*/
-
-.route-layer {
-  /* Prevent “flash then hide”: start hidden until JS sets visible */
-  opacity: 0;
-  transform: translateY(6px);
-  filter: blur(2px);
-
-  transition:
-    opacity var(--route-fade-ms) var(--route-ease),
-    transform var(--route-fade-ms) var(--route-ease),
-    filter var(--route-fade-ms) var(--route-ease);
-
+  padding-top: var(--nav-h);
   will-change: opacity, transform, filter;
 }
 
-.route-layer.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
+/* ============================
+   PAGE TRANSITIONS (fast)
+   - enter animation triggers on html.route-enter
+============================ */
 
-.route-layer.is-hidden {
-  opacity: 0;
-  transform: translateY(6px);
-  filter: blur(2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .route-layer {
-    transition: none;
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    filter: blur(2px);
+  }
+  to {
     opacity: 1;
-    transform: none;
-    filter: none;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0px);
+  }
+}
+
+html.route-enter .site-main {
+  animation: pageEnter 420ms ease both;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html.route-enter .site-main {
+    animation: none !important;
   }
 }

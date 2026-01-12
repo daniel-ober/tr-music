@@ -1,35 +1,25 @@
-/* src/styles/app.css */
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 
-/* ------------------------------------
-   Global-only styles.
+  background-image: var(--stage-bg-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-   IMPORTANT:
-   - Do NOT put component styles here.
-   - SiteShell owns the background canvas.
-   - theme.css is imported globally via src/index.css
-------------------------------------- */
-
-html,
-body {
-  height: 100%;
+  /* ✅ darker */
+  filter: contrast(1.05) brightness(0.42);
 }
 
-body {
-  margin: 0;
-  background: var(--bg-black);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  overflow-x: hidden;
+/* ✅ optional: adds a subtle dark wash WITHOUT killing the glow */
+.app-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    1200px 900px at 50% 40%,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.78)
+  );
 }
-
-/* React root fills viewport */
-#root {
-  min-height: 100vh;
-  position: relative;
-  isolation: isolate;
-}
-
-/* ✅ IMPORTANT:
-   Remove any global background overlays/pseudo elements.
-   SiteShell provides the fixed stage image + stage light glows.
-*/

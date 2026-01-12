@@ -1,3 +1,4 @@
+// src/app/routes.jsx
 import { Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home/Home";
@@ -6,9 +7,9 @@ import Music from "../pages/Music/Music";
 import Shows from "../pages/Shows/Shows";
 import Contact from "../pages/Contact/Contact";
 
-export default function RoutesConfig({ location }) {
+export default function RoutesConfig() {
   return (
-    <Routes location={location}>
+    <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/bio" element={<Bio />} />
       <Route path="/music" element={<Music />} />

@@ -1,11 +1,7 @@
 /* src/styles/global.css */
 @import "./theme.css";
-
-/* (optional) if you use these files */
 @import "./typography.css";
 @import "./variables.css";
-
-/* rest of your global styles... */
 
 html,
 body {
@@ -14,26 +10,158 @@ body {
 
 body {
   margin: 0;
-  background: #050505; /* fallback behind everything */
+  background: #050505;
   color: var(--text-primary);
   font-family: var(--font-body);
   overflow-x: hidden;
 }
 
-/* React root fills page */
 #root {
   min-height: 100vh;
   position: relative;
   isolation: isolate;
 }
 
-/* ✅ IMPORTANT:
-   We intentionally do NOT define .app-stage / .app-backdrop / .app-glow here.
-   Those were competing with SiteShell's fixed background and glow overlays,
-   and also made the stage lights look faint.
-*/
+/* ============================
+   APP STAGE LAYERS
+============================ */
 
-/* ✅ IMPORTANT:
-   We also do NOT define .route-stage transition system here.
-   SiteShell + Navbar already handle route transitions via html.route-exit/enter.
+.app-stage {
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Stage image */
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  background-image: var(--stage-bg-url);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+
+  transform: translate3d(0, var(--stage-parallax-y, 0px), 0);
+  will-change: transform;
+
+  /* slightly darker, but not crushed */
+  filter: grayscale(12%) contrast(1.06) brightness(0.35);
+}
+
+/* Glow layer (route-based) */
+.app-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(66% 58% at 18% 12%, var(--glow-a), transparent 60%),
+    radial-gradient(60% 54% at 84% 16%, var(--glow-b), transparent 62%),
+    radial-gradient(52% 52% at 52% 78%, var(--glow-c), transparent 72%);
+
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  will-change: opacity, background;
+}
+
+/* ✅ NEW: soft color wash BETWEEN background and foreground
+   This gives the “different stage lights per screen” feel
+   without looking like UI gradients.
 */
+.app-colorwash {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+    radial-gradient(900px 700px at 18% 12%, rgba(255, 255, 255, 0.06), transparent 65%),
+    radial-gradient(860px 620px at 86% 16%, rgba(255, 255, 255, 0.04), transparent 68%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.38));
+
+  /* gentle “light bleed” */
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+  will-change: opacity;
+}
+
+/* Vignette/depth layer */
+.app-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      70% 78% at 50% 45%,
+      rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.86) 72%
+    ),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.74));
+}
+
+/* ============================
+   ROUTE → GLOW COLORS
+============================ */
+
+:root {
+  --glow-a: rgba(201, 162, 93, 0.26);
+  --glow-b: rgba(201, 162, 93, 0.18);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+html[data-route="/"] {
+  --glow-a: rgba(201, 162, 93, 0.28);
+  --glow-b: rgba(255, 220, 160, 0.14);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+html[data-route^="/bio"] {
+  --glow-a: rgba(140, 185, 255, 0.22);
+  --glow-b: rgba(120, 220, 200, 0.12);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+html[data-route^="/music"] {
+  --glow-a: rgba(188, 140, 255, 0.22);
+  --glow-b: rgba(80, 200, 255, 0.14);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+html[data-route^="/shows"] {
+  --glow-a: rgba(255, 160, 120, 0.18);
+  --glow-b: rgba(255, 210, 160, 0.12);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+html[data-route^="/contact"] {
+  --glow-a: rgba(120, 220, 160, 0.16);
+  --glow-b: rgba(201, 162, 93, 0.12);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+/* ✅ Make glow shift slower than page transition */
+.app-glow,
+.app-colorwash {
+  transition: opacity 420ms ease, background 420ms ease;
+}
+
+html.glow-shift .app-glow,
+html.glow-shift .app-colorwash {
+  transition: opacity 1800ms ease, background 1800ms ease;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .app-backdrop {
+    transform: none !important;
+  }
+  .app-glow,
+  .app-colorwash {
+    transition: none !important;
+  }
+}

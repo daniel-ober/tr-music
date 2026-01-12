@@ -1,4 +1,5 @@
 // src/components/layout/Footer.jsx
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Footer.css";
 
 function IconInstagram(props) {
@@ -57,20 +58,18 @@ function IconAppleMusic(props) {
 }
 
 export default function Footer() {
-  function scrollToId(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const navH =
-      parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue("--nav-h")
-      ) || 92;
-
-    const y = el.getBoundingClientRect().top + window.scrollY - navH;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  }
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const year = new Date().getFullYear();
+
+  function go(path) {
+    if (location.pathname === path) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    navigate(path);
+  }
 
   return (
     <footer className="site-footer">
@@ -102,34 +101,20 @@ export default function Footer() {
 
         <div className="footer-mid">
           <div className="footer-sitemap" aria-label="Site map">
-            <button type="button" onClick={() => scrollToId("home")}>
-              Home
-            </button>
-            <button type="button" onClick={() => scrollToId("bio")}>
-              Bio
-            </button>
-            <button type="button" onClick={() => scrollToId("music")}>
-              Music
-            </button>
-            <button type="button" onClick={() => scrollToId("shows")}>
-              Shows
-            </button>
-            <button type="button" onClick={() => scrollToId("contact")}>
-              Contact
-            </button>
+            <button type="button" onClick={() => go("/")}>Home</button>
+            <button type="button" onClick={() => go("/bio")}>Bio</button>
+            <button type="button" onClick={() => go("/music")}>Music</button>
+            <button type="button" onClick={() => go("/shows")}>Shows</button>
+            <button type="button" onClick={() => go("/contact")}>Contact</button>
           </div>
         </div>
 
         <div className="footer-legal">
           <span>© {year} Tawnya Reynolds</span>
           <span className="footer-dot">·</span>
-          <a href="#" className="footer-legal-link">
-            Privacy
-          </a>
+          <a href="#" className="footer-legal-link">Privacy</a>
           <span className="footer-dot">·</span>
-          <a href="#" className="footer-legal-link">
-            Terms
-          </a>
+          <a href="#" className="footer-legal-link">Terms</a>
         </div>
       </div>
     </footer>

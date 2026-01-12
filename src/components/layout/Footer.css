@@ -2,7 +2,6 @@
 
 .site-footer {
   margin-top: auto;
-
   padding: 2.25rem 0 2.1rem;
   color: rgba(255, 255, 255, 0.55);
 }
@@ -71,7 +70,6 @@
 .footer-icon:hover {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.08);
-  /* border-color: rgba(255, 255, 255, 0.2); */
   color: rgba(255, 255, 255, 0.92);
 }
 

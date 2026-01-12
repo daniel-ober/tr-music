@@ -8,11 +8,15 @@
   position: relative;
   width: 100%;
 
-  /* Fixed navbar offset so nothing gets hidden behind it */
+  /* ✅ IMPORTANT:
+     SiteShell already offsets content by --nav-h
+     so doing it again here creates the “gap”. */
+  padding-top: 0;
+
   padding-bottom: clamp(10px, 2.2vw, 28px);
 
-  /* Use full viewport height; padding handles the nav */
-  min-height: 100svh;
+  /* ✅ Fill a strong hero height without forcing huge empty space */
+  min-height: 65svh;
 
   display: flex;
   align-items: center;
@@ -85,36 +89,36 @@
 }
 
 .stage-copy {
-  max-width: 640px;
+  max-width: 660px;
 }
 
 .stage-kicker {
-  font-size: 0.74rem;
-  letter-spacing: 0.28em;
+  font-size: 0.78rem;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 0.85rem;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 0.9rem;
 }
 
 .stage-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.1rem, 3.6vw, 3.25rem);
-  letter-spacing: 0.18em;
+  font-size: clamp(2.3rem, 4vw, 3.55rem);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.96);
   margin: 0;
-  line-height: 1.05;
+  line-height: 1.03;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.62);
 }
 
 .stage-blurb {
   margin: 1.05rem 0 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.65;
-  font-size: 1.02rem;
-  max-width: 52ch;
+  font-size: 1.04rem;
+  max-width: 54ch;
 }
 
-/* Ticket CTAs */
 .stage-cta {
   margin-top: 1.6rem;
   display: flex;
@@ -163,16 +167,16 @@
 
 .ticket-top {
   display: block;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .ticket-sub {
   display: block;
   margin-top: 0.35rem;
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.94rem;
+  color: rgba(255, 255, 255, 0.64);
 }
 
 .ticket-btn:hover {
@@ -184,7 +188,6 @@
   border-color: rgba(201, 162, 93, 0.35);
 }
 
-/* Quote */
 .stage-quote {
   margin-top: 1.8rem;
   display: grid;
@@ -209,14 +212,11 @@
    RESPONSIVE
 ============================ */
 
-/* Stack on smaller laptops / tablets */
 @media (max-width: 1080px) {
   .stage-inner {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-
-    /* ✅ REMOVED the accidental margin-top: 300px */
   }
 
   .stage-right {
@@ -246,7 +246,6 @@
   }
 }
 
-/* Mobile crop band */
 @media (max-width: 860px) {
   .stage-hero {
     align-items: flex-start;
@@ -282,5 +281,9 @@
 
   .stage-portrait-wrap {
     --portrait-offset-y: -18px;
+  }
+
+  .stage-title {
+    letter-spacing: 0.12em;
   }
 }

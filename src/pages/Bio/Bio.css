@@ -2,129 +2,119 @@
 
 .bio-page {
   width: 100%;
-  padding: 34px 0 80px;
+  padding: 28px 0 80px; /* (SiteShell already handles navbar spacing) */
 }
 
 .bio-wrap {
-  width: min(1160px, calc(100% - 56px));
+  width: min(1260px, calc(100% - 48px));
   margin: 0 auto;
 }
 
 .bio-card {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.055);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 22px;
   overflow: hidden;
-
   box-shadow: 0 24px 90px rgba(0, 0, 0, 0.55);
 }
 
 .bio-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 0;
+  grid-template-columns: 1.15fr 1fr;
 }
 
 .bio-photo {
   padding: 26px;
-  background: rgba(0, 0, 0, 0.22);
+  background: rgba(0, 0, 0, 0.14);
 }
 
-.bio-photo-placeholder {
+.bio-photo-frame {
+  position: relative;
+  min-height: 440px;
   height: 100%;
-  min-height: 420px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px dashed rgba(255, 255, 255, 0.16);
-
-  display: grid;
-  place-items: center;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.bio-photo-inner {
-  width: min(380px, 88%);
-  height: 78%;
-  border-radius: 14px;
+.bio-photo-img {
+  width: 100%;
+  height: 100%;
+  display: block;
 
-  background: radial-gradient(
-    circle at 35% 25%,
-    rgba(255, 255, 255, 0.08),
-    rgba(0, 0, 0, 0.1) 55%,
-    rgba(0, 0, 0, 0.25) 100%
-  );
+  /* ✅ fills both width + height without stretching */
+  object-fit: cover;
+  object-position: center;
 
-  display: grid;
-  place-items: center;
-}
+  /* ✅ keep color, only a tiny “cinematic” touch */
+  filter: grayscale(0.12) contrast(1.03) brightness(0.98);
 
-.bio-photo-text {
-  font-size: 0.7rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.38);
+  transform: scale(1.01);
 }
 
 .bio-copy {
-  padding: 30px 30px 26px;
+  padding: 28px 34px 26px;
+}
+
+.bio-kicker {
+  font-size: 0.82rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.58);
+  margin-bottom: 14px;
 }
 
 .bio-name {
   margin: 0 0 10px;
   font-family: var(--font-heading);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(1.8rem, 2.3vw, 2.2rem);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.08;
 }
 
 .bio-subtitle {
-  margin: 0 0 16px;
-  font-size: 0.76rem;
-  letter-spacing: 0.24em;
+  margin: 0 0 18px;
+  font-size: 0.9rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.66);
+  color: rgba(255, 255, 255, 0.64);
 }
 
 .bio-paragraph {
-  margin: 0 0 14px;
-  line-height: 1.7;
-  font-size: 0.98rem;
-  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 18px;
+  line-height: 1.82;
+  font-size: 1.06rem;
+  color: rgba(255, 255, 255, 0.76);
 }
 
-.bio-label {
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.78);
-  margin-right: 10px;
-}
-
-.bio-quote {
-  margin-top: 18px;
+/* ✅ human, not “AI pills” */
+.bio-record {
   font-style: italic;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(255, 255, 255, 0.86);
+  white-space: nowrap;
 }
 
-.bio-footer {
-  margin-top: 26px;
+.bio-cta-row {
+  margin-top: 22px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .bio-booking {
-  width: min(720px, 100%);
+  width: min(520px, 100%);
   padding: 14px 16px;
-  border-radius: 12px;
+  border-radius: 14px;
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(201, 162, 93, 0.36);
   background: rgba(0, 0, 0, 0.18);
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.82);
 
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.74rem;
 
   cursor: pointer;
   transition: transform 0.15s ease, background 0.15s ease, border 0.15s ease,
@@ -134,20 +124,12 @@
 .bio-booking:hover {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(201, 162, 93, 0.35);
-  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(201, 162, 93, 0.58);
+  color: rgba(255, 255, 255, 0.94);
   box-shadow: 0 16px 60px rgba(0, 0, 0, 0.35);
 }
 
-@media (max-width: 900px) {
-  .bio-page {
-    padding: 22px 0 70px;
-  }
-
-  .bio-wrap {
-    width: min(1160px, calc(100% - 28px));
-  }
-
+@media (max-width: 980px) {
   .bio-grid {
     grid-template-columns: 1fr;
   }
@@ -156,11 +138,15 @@
     padding: 16px;
   }
 
-  .bio-photo-placeholder {
-    min-height: 320px;
+  .bio-photo-frame {
+    min-height: 360px;
   }
 
   .bio-copy {
     padding: 18px 18px 16px;
+  }
+
+  .bio-cta-row {
+    justify-content: center;
   }
 }
