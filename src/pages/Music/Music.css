@@ -7,8 +7,8 @@
   /* ✅ navbar offset */
   padding-top: calc(var(--nav-h) + 22px);
 
-  /* ✅ leave space for site footer; player spacing is handled globally via --player-h */
-  padding-bottom: 80px;
+  /* ✅ tighten space above footer (player clearance handled by --player-h globally) */
+  padding-bottom: 24px;
 }
 
 .music-wrap {

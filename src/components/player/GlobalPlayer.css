@@ -296,6 +296,15 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
+.gp__link {
+  color: rgba(201, 162, 93, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.gp__link:hover {
+  text-decoration: underline;
+}
 /* ---------- Mobile ---------- */
 @media (max-width: 860px) {
   .gp__inner {
@@ -315,8 +324,14 @@
     grid-template-columns: 46px 1fr 46px;
   }
 
+  /* Hide button text on mobile by default */
   .gp__btnText {
     display: none; /* keep it clean on mobile */
+  }
+
+  /* ✅ BUT show shuffle label on mobile */
+  .gp__btnText--shuffle {
+    display: inline;
   }
 
   .gp__collapsedBar {

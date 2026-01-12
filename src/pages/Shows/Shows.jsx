@@ -1,3 +1,5 @@
+// src/pages/Shows/Shows.jsx
+import { useNavigate } from "react-router-dom";
 import "./Shows.css";
 
 const SHOWS = [
@@ -12,6 +14,8 @@ const SHOWS = [
 ];
 
 export default function Shows() {
+  const navigate = useNavigate();
+
   return (
     <main className="shows-page">
       <section className="shows-wrap">
@@ -34,7 +38,11 @@ export default function Shows() {
         </div>
 
         <div className="shows-footer">
-          <button className="shows-booking" type="button">
+          <button
+            className="shows-booking"
+            type="button"
+            onClick={() => navigate("/contact")}
+          >
             Booking and Contact
           </button>
         </div>

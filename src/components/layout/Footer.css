@@ -2,7 +2,10 @@
 
 .site-footer {
   margin-top: auto;
-  padding: 2.25rem 0 2.1rem;
+
+  /* ✅ Top stays the same, bottom now reserves space for the fixed player */
+  padding: 2.25rem 0 calc(env(safe-area-inset-bottom) + 2.1rem + var(--player-h, 0px));
+
   color: rgba(255, 255, 255, 0.55);
 }
 

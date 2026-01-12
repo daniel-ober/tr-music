@@ -133,18 +133,23 @@ function IconNext() {
 
 function IconPlay() {
   return (
-    <svg className="gp__icon gp__icon--play" viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M9 7l10 5-10 5V7z"
-        fill="currentColor"
-      />
+    <svg
+      className="gp__icon gp__icon--play"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M9 7l10 5-10 5V7z" fill="currentColor" />
     </svg>
   );
 }
 
 function IconPause() {
   return (
-    <svg className="gp__icon gp__icon--play" viewBox="0 0 24 24" aria-hidden="true">
+    <svg
+      className="gp__icon gp__icon--play"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
       <path d="M7 6h4v12H7z" fill="currentColor" />
       <path d="M13 6h4v12h-4z" fill="currentColor" />
     </svg>
@@ -209,7 +214,7 @@ export default function GlobalPlayer() {
   // Track state
   const [current, setCurrent] = useState({
     albumTitle: "No track selected",
-    albumArtist: "Select a song to begin",
+    albumArtist: "Select a song from the catalog to start jammin’",
     trackTitle: "",
     coverSrc: "",
     albumId: "",
@@ -236,7 +241,14 @@ export default function GlobalPlayer() {
     const apply = () => {
       const rect = el.getBoundingClientRect();
       const h = Math.max(0, Math.round(rect.height));
-      document.documentElement.style.setProperty("--player-h", `${h}px`);
+
+      // ✅ Extra breathing room so footer links are never covered
+      const BUFFER_PX = 44;
+
+      document.documentElement.style.setProperty(
+        "--player-h",
+        `${h + BUFFER_PX}px`
+      );
     };
 
     apply();
@@ -329,8 +341,8 @@ export default function GlobalPlayer() {
       shuffleMode === "album"
         ? albumTracks
         : shuffleMode === "all"
-          ? catalogTracks
-          : [];
+        ? catalogTracks
+        : [];
 
     if (!pool.length) return;
 
@@ -381,139 +393,153 @@ export default function GlobalPlayer() {
     ? current.trackTitle
     : "No track selected";
 
-  const displaySub = current.trackTitle
-    ? `${current.albumTitle} • ${current.albumArtist}`
-    : current.albumArtist || "Select a song to begin";
+  const displaySub = current.trackTitle ? (
+    `${current.albumTitle} • ${current.albumArtist}`
+  ) : (
+    <>
+      Select a song from the{" "}
+      <a href="/music" className="gp__link">
+        catalog
+      </a>{" "}
+      to start jammin’
+    </>
+  );
 
   // Minimal hidden / collapsed bar height is handled by CSS.
   // When collapsed, we still show art + basic controls.
-return (
-  <section
-    ref={rootRef}
-    className={`gp ${expanded ? "gp--expanded" : "gp--collapsed"}`}
-    aria-label="Global music player"
-  >
-    {/* ✅ COLLAPSED: single action only */}
-    {!expanded && (
-      <div className="gp__collapsedBar">
-        <button
-          type="button"
-          className="gp__openBtn"
-          onClick={() => setExpanded(true)}
-          aria-label="Open player"
-          title="Open Player"
-        >
-          <IconChevronUp />
-          <span className="gp__openText">Open Player</span>
-        </button>
-      </div>
-    )}
-
-    {/* ✅ EXPANDED: full player UI */}
-    {expanded && (
-      <div className="gp__inner">
-        <div className="gp__left">
-          <div className="gp__cover" aria-hidden="true">
-            {current.coverSrc ? (
-              <img src={current.coverSrc} alt="" draggable="false" />
-            ) : (
-              <div className="gp__coverFallback" />
-            )}
-          </div>
-
-          <div className="gp__meta">
-            <div className="gp__track" title={displayTitle}>
-              {displayTitle}
-            </div>
-            <div className="gp__sub" title={displaySub}>
-              {displaySub}
-            </div>
-          </div>
-        </div>
-
-        <div className="gp__center">
-          <div className="gp__controls" aria-label="Player controls">
-            <button
-              type="button"
-              className={`gp__btn gp__btn--ghost ${
-                shuffleMode !== "off" ? "gp__btn--active" : ""
-              }`}
-              onClick={cycleShuffleMode}
-              aria-label={`Shuffle mode: ${shuffleLabel}`}
-              title={`Shuffle: ${shuffleLabel}`}
-            >
-              <IconShuffle active={shuffleMode !== "off"} />
-              <span className="gp__btnText">{shuffleLabel}</span>
-            </button>
-
-            <button
-              type="button"
-              className="gp__btn gp__btn--icon"
-              onClick={prevTrack}
-              aria-label="Previous"
-              title="Previous"
-              disabled={!hasTrack && !albumTracks.length && !catalogTracks.length}
-            >
-              <IconPrev />
-            </button>
-
-            <button
-              type="button"
-              className="gp__btn gp__btn--primary"
-              onClick={togglePlay}
-              aria-label={isPlaying ? "Pause" : "Play"}
-              title={isPlaying ? "Pause" : "Play"}
-              disabled={!hasTrack}
-            >
-              {isPlaying ? <IconPause /> : <IconPlay />}
-            </button>
-
-            <button
-              type="button"
-              className="gp__btn gp__btn--icon"
-              onClick={nextTrack}
-              aria-label="Next"
-              title="Next"
-              disabled={!hasTrack && !albumTracks.length && !catalogTracks.length}
-            >
-              <IconNext />
-            </button>
-          </div>
-
-          <div className="gp__timeline" aria-label="Timeline">
-            <div className="gp__time gp__time--left">0:00</div>
-
-            <input
-              className="gp__range"
-              type="range"
-              min="0"
-              max="1000"
-              value={Math.round(progress * 1000)}
-              onChange={(e) => {
-                const v = clamp(Number(e.target.value), 0, 1000);
-                setProgress(v / 1000);
-              }}
-              aria-label="Scrub"
-            />
-
-            <div className="gp__time gp__time--right">0:00</div>
-          </div>
-        </div>
-
-        <div className="gp__right">
+  return (
+    <section
+      ref={rootRef}
+      className={`gp ${expanded ? "gp--expanded" : "gp--collapsed"}`}
+      aria-label="Global music player"
+    >
+      {/* ✅ COLLAPSED: single action only */}
+      {!expanded && (
+        <div className="gp__collapsedBar">
           <button
             type="button"
-            className="gp__toggle"
-            onClick={() => setExpanded(false)}
-            aria-label="Collapse player"
-            title="Collapse"
+            className="gp__openBtn"
+            onClick={() => setExpanded(true)}
+            aria-label="Open player"
+            title="Open Player"
           >
-            <IconChevronDown />
-            <span className="gp__toggleText">Collapse</span>
+            <IconChevronUp />
+            <span className="gp__openText">Open Player</span>
           </button>
         </div>
-      </div>
-    )}
-  </section>
-);
+      )}
+
+      {/* ✅ EXPANDED: full player UI */}
+      {expanded && (
+        <div className="gp__inner">
+          <div className="gp__left">
+            <div className="gp__cover" aria-hidden="true">
+              {current.coverSrc ? (
+                <img src={current.coverSrc} alt="" draggable="false" />
+              ) : (
+                <div className="gp__coverFallback" />
+              )}
+            </div>
+
+            <div className="gp__meta">
+              <div className="gp__track" title={displayTitle}>
+                {displayTitle}
+              </div>
+              <div className="gp__sub" title={displaySub}>
+                {displaySub}
+              </div>
+            </div>
+          </div>
+
+          <div className="gp__center">
+            <div className="gp__controls" aria-label="Player controls">
+              <button
+                type="button"
+                className={`gp__btn gp__btn--ghost ${
+                  shuffleMode !== "off" ? "gp__btn--active" : ""
+                }`}
+                onClick={cycleShuffleMode}
+                aria-label={`Shuffle mode: ${shuffleLabel}`}
+                title={`Shuffle: ${shuffleLabel}`}
+              >
+                <IconShuffle active={shuffleMode !== "off"} />
+                <span className="gp__btnText gp__btnText--shuffle">
+                  {shuffleLabel}
+                </span>{" "}
+              </button>
+
+              <button
+                type="button"
+                className="gp__btn gp__btn--icon"
+                onClick={prevTrack}
+                aria-label="Previous"
+                title="Previous"
+                disabled={
+                  !hasTrack && !albumTracks.length && !catalogTracks.length
+                }
+              >
+                <IconPrev />
+              </button>
+
+              <button
+                type="button"
+                className="gp__btn gp__btn--primary"
+                onClick={togglePlay}
+                aria-label={isPlaying ? "Pause" : "Play"}
+                title={isPlaying ? "Pause" : "Play"}
+                disabled={!hasTrack}
+              >
+                {isPlaying ? <IconPause /> : <IconPlay />}
+              </button>
+
+              <button
+                type="button"
+                className="gp__btn gp__btn--icon"
+                onClick={nextTrack}
+                aria-label="Next"
+                title="Next"
+                disabled={
+                  !hasTrack && !albumTracks.length && !catalogTracks.length
+                }
+              >
+                <IconNext />
+              </button>
+            </div>
+
+            <div className="gp__timeline" aria-label="Timeline">
+              <div className="gp__time gp__time--left">0:00</div>
+
+              <input
+                className="gp__range"
+                type="range"
+                min="0"
+                max="1000"
+                value={Math.round(progress * 1000)}
+                onChange={(e) => {
+                  const v = clamp(Number(e.target.value), 0, 1000);
+                  setProgress(v / 1000);
+                }}
+                aria-label="Scrub"
+              />
+
+              <div className="gp__time gp__time--right">0:00</div>
+            </div>
+          </div>
+
+          <div className="gp__right">
+            <button
+              type="button"
+              className="gp__toggle"
+              onClick={() => setExpanded(false)}
+              aria-label="Collapse player"
+              title="Collapse"
+            >
+              <IconChevronDown />
+              <span className="gp__toggleText">Collapse</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
 }

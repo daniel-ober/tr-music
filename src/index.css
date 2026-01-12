@@ -7,7 +7,10 @@
 
 @import "./styles/theme.css";
 
-/* Base document */
+/* ============================
+   Base document
+============================ */
+
 html,
 body {
   height: 100%;
@@ -20,7 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ✅ Critical: DO NOT center the entire app */
+/* ✅ DO NOT center the entire app */
 body {
   margin: 0;
   display: block;
@@ -30,6 +33,12 @@ body {
   color: var(--text-primary);
   font-family: var(--font-body);
   overflow-x: hidden;
+
+  /* ✅ CRITICAL:
+     Reserve space for the GlobalPlayer so footer links
+     (Privacy / Terms / socials) are never covered
+  */
+  padding-bottom: calc(var(--player-h, 0px) + env(safe-area-inset-bottom));
 }
 
 /* React root should fill the page */
@@ -40,11 +49,15 @@ body {
   isolation: isolate;
 }
 
-/* Links */
+/* ============================
+   Links
+============================ */
+
 a {
   color: inherit;
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: underline;
 }
@@ -58,4 +71,34 @@ button {
 /* Optional */
 html {
   scroll-behavior: smooth;
+}
+
+/* ============================
+   App backdrop (stage image)
+============================ */
+
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  background-image: var(--stage-bg-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* darker but cinematic */
+  filter: contrast(1.05) brightness(0.42);
+}
+
+/* Subtle dark wash without killing glow */
+.app-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    1200px 900px at 50% 40%,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.78)
+  );
 }
