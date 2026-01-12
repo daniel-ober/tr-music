@@ -1,10 +1,6 @@
 /* src/pages/Home/Home.css */
-@import "../../styles/theme.css";
 
-/* Keep Home page styles minimal to avoid duplicating StageHero.css */
-body {
-  margin: 0;
-  background: var(--bg-black);
-  color: var(--text-primary);
-  font-family: var(--font-body);
+/* Keep Home page styles scoped to the page root (NOT body) */
+.home-page {
+  width: 100%;
 }

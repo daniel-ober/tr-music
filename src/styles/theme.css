@@ -1,35 +1,225 @@
-/* src/styles/theme.css */
 
-:root {
-  /* Core palette */
-  --bg-black: #0e0e0e;
-  --bg-charcoal: #151515;
-  --bg-stage: #0b0b0b;
+/* ============================
+   SITE SHELL
+============================ */
 
-  --text-primary: #f2f2f2;
-  --text-muted: #b8b8b8;
+.site-shell {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 
-  /* Nashville warmth */
-  --accent-amber: #c9a25d;
-  --accent-soft: rgba(201, 162, 93, 0.25);
+  /* ✅ critical: keep stacking inside this shell */
+  isolation: isolate;
 
-  /* UI */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-
-  /* Typography */
-  --font-heading: "Georgia", "Times New Roman", serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
-
-  /* Layout tokens */
-  --page-pad: clamp(1rem, 3vw, 2rem);
-
-  /* Single source of truth for fixed navbar height */
-  --nav-h: 92px;
+  /* defaults */
+  --glow-a: rgba(201, 162, 93, 0.42);
+  --glow-b: rgba(201, 162, 93, 0.22);
+  --glow-c: rgba(255, 255, 255, 0.06);
 }
 
-@media (max-width: 900px) {
-  :root {
-    --nav-h: 88px;
+/* Per-route glows (stronger so it’s obvious) */
+.site-shell[data-route="home"] {
+  --glow-a: rgba(201, 162, 93, 0.46);
+  --glow-b: rgba(201, 162, 93, 0.24);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+.site-shell[data-route="bio"] {
+  --glow-a: rgba(140, 185, 255, 0.46);
+  --glow-b: rgba(140, 185, 255, 0.22);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+.site-shell[data-route="music"] {
+  --glow-a: rgba(188, 140, 255, 0.48);
+  --glow-b: rgba(188, 140, 255, 0.22);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+.site-shell[data-route="shows"] {
+  --glow-a: rgba(120, 255, 210, 0.40);
+  --glow-b: rgba(120, 255, 210, 0.20);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+.site-shell[data-route="contact"] {
+  --glow-a: rgba(255, 170, 120, 0.40);
+  --glow-b: rgba(255, 170, 120, 0.20);
+  --glow-c: rgba(255, 255, 255, 0.06);
+}
+
+/* ============================
+   FIXED BACKGROUND LAYERS
+   ✅ NO negative z-index (fixes "colors invisible")
+============================ */
+
+/* 1) Stage image layer */
+.site-bg-img {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+
+  /* mostly B/W stage image look */
+  filter: grayscale(92%) brightness(0.42) contrast(1.10);
+  will-change: transform;
+
+  pointer-events: none;
+}
+
+/* 2) Colored stage lights layer (NOT filtered) */
+.site-bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(66% 58% at 18% 12%, var(--glow-a), transparent 60%),
+    radial-gradient(60% 54% at 84% 16%, var(--glow-b), transparent 62%),
+    radial-gradient(52% 52% at 52% 78%, var(--glow-c), transparent 72%);
+
+  /* Stronger visibility */
+  mix-blend-mode: screen;
+  opacity: 1;
+
+  transition: opacity 360ms ease, background 360ms ease;
+}
+
+/* 3) Vignette/depth layer */
+.site-bg-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+
+  pointer-events: none;
+
+  /* ✅ slightly lighter than before so colors show through */
+  background:
+    radial-gradient(
+      70% 78% at 50% 45%,
+      rgba(0, 0, 0, 0.12),
+      rgba(0, 0, 0, 0.82) 72%
+    ),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.80));
+}
+
+/* Fallback if blend mode unsupported */
+@supports not (mix-blend-mode: screen) {
+  .site-bg-glow {
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+}
+
+/* ============================
+   FOREGROUND LAYOUT
+============================ */
+
+.site-foreground {
+  position: relative;
+  z-index: 3;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+  padding-top: var(--nav-h);
+  display: block;
+
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0px);
+
+  will-change: opacity, transform, filter;
+}
+
+.site-footer {
+  margin-top: auto;
+}
+
+/* ===== Route/Page transitions ===== */
+.page {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 220ms ease, transform 220ms ease;
+  will-change: opacity, transform;
+}
+
+.page.is-entering {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.page.is-leaving {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .page.is-entering,
+  .page.is-leaving {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ============================
+   PAGE TRANSITIONS
+============================ */
+
+@keyframes pageExit {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0px);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0);
+    filter: blur(2px);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0px);
+  }
+}
+
+html.route-exit .site-main {
+  animation: pageExit 240ms ease both;
+}
+
+html.route-enter .site-main {
+  animation: pageEnter 360ms ease both;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html.route-exit .site-main,
+  html.route-enter .site-main {
+    animation: none !important;
+  }
+
+  .site-bg-glow {
+    transition: none !important;
   }
 }

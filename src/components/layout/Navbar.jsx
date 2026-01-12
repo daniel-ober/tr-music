@@ -1,17 +1,19 @@
-// src/components/layout/Navbar.jsx
 import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const items = useMemo(
     () => [
-      { label: "Home", id: "home" },
-      { label: "Bio", id: "bio" },
-      { label: "Music", id: "music" },
-      { label: "Shows", id: "shows" },
-      { label: "Contact", id: "contact" },
+      { label: "Home", to: "/" },
+      { label: "Bio", to: "/bio" },
+      { label: "Music", to: "/music" },
+      { label: "Shows", to: "/shows" },
+      { label: "Contact", to: "/contact" },
     ],
     []
   );
@@ -39,19 +41,16 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  function scrollToId(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
+  function goTo(path) {
+    setOpen(false);
 
-    const navH =
-      Number(
-        getComputedStyle(document.documentElement)
-          .getPropertyValue("--nav-h")
-          .replace("px", "")
-      ) || 92;
+    // If already on this route, just scroll to top smoothly.
+    if (location.pathname === path) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
 
-    const y = el.getBoundingClientRect().top + window.scrollY - navH;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    navigate(path);
   }
 
   return (
@@ -59,7 +58,7 @@ export default function Navbar() {
       <div className="navbar-inner">
         <button
           className="navbar-mark"
-          onClick={() => scrollToId("home")}
+          onClick={() => goTo("/")}
           aria-label="Go to home"
           type="button"
         >
@@ -69,17 +68,20 @@ export default function Navbar() {
 
         <nav className="navbar-nav" aria-label="Primary">
           <ul className="navbar-links">
-            {items.map((item) => (
-              <li key={item.id}>
-                <button
-                  className="navbar-link-btn"
-                  onClick={() => scrollToId(item.id)}
-                  type="button"
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
+            {items.map((item) => {
+              const isActive = location.pathname === item.to;
+              return (
+                <li key={item.to}>
+                  <button
+                    className={`navbar-link-btn ${isActive ? "is-active" : ""}`}
+                    onClick={() => goTo(item.to)}
+                    type="button"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
 
           <button
@@ -115,19 +117,19 @@ export default function Navbar() {
 
         <div className="navsheet-panel">
           <div className="navsheet-links">
-            {items.map((item) => (
-              <button
-                key={item.id}
-                className="navsheet-link"
-                onClick={() => {
-                  setOpen(false);
-                  scrollToId(item.id);
-                }}
-                type="button"
-              >
-                {item.label}
-              </button>
-            ))}
+            {items.map((item) => {
+              const isActive = location.pathname === item.to;
+              return (
+                <button
+                  key={item.to}
+                  className={`navsheet-link ${isActive ? "is-active" : ""}`}
+                  onClick={() => goTo(item.to)}
+                  type="button"
+                >
+                  {item.label}
+                </button>
+              );
+            })}
           </div>
 
           <div className="navsheet-footer">

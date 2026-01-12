@@ -1,6 +1,12 @@
 /* src/styles/global.css */
 @import "./theme.css";
 
+/* (optional) if you use these files */
+@import "./typography.css";
+@import "./variables.css";
+
+/* rest of your global styles... */
+
 html,
 body {
   height: 100%;
@@ -8,7 +14,7 @@ body {
 
 body {
   margin: 0;
-  background: #050505; /* fallback behind the SiteShell canvas */
+  background: #050505; /* fallback behind everything */
   color: var(--text-primary);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -18,5 +24,16 @@ body {
 #root {
   min-height: 100vh;
   position: relative;
-  isolation: isolate; /* safe stacking context */
+  isolation: isolate;
 }
+
+/* ✅ IMPORTANT:
+   We intentionally do NOT define .app-stage / .app-backdrop / .app-glow here.
+   Those were competing with SiteShell's fixed background and glow overlays,
+   and also made the stage lights look faint.
+*/
+
+/* ✅ IMPORTANT:
+   We also do NOT define .route-stage transition system here.
+   SiteShell + Navbar already handle route transitions via html.route-exit/enter.
+*/

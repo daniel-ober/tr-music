@@ -1,45 +1,35 @@
 /* src/components/hero/StageHero.css */
-@import "../../styles/theme.css";
+
+/* ============================
+   STAGE HERO
+============================ */
 
 .stage-hero {
   position: relative;
-  min-height: calc(100vh - var(--nav-h, 92px));
   width: 100%;
+
+  /* Fixed navbar offset so nothing gets hidden behind it */
+  padding-bottom: clamp(10px, 2.2vw, 28px);
+
+  /* Use full viewport height; padding handles the nav */
+  min-height: 100svh;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* ✅ IMPORTANT: SiteShell already offsets for navbar.
-     Do NOT add padding-top here. */
 }
 
-/* Center haze behind composed content */
-.stage-haze {
-  position: absolute;
-  z-index: 1;
-  width: min(1200px, 92vw);
-  height: min(560px, 64vh);
-  border-radius: 26px;
-  background: radial-gradient(
-    circle at 45% 45%,
-    rgba(255, 255, 255, 0.06),
-    rgba(201, 162, 93, 0.03) 40%,
-    rgba(0, 0, 0, 0) 70%
-  );
-  filter: blur(2px);
-  opacity: 0.9;
-}
-
-/* Foreground layout */
+/* ✅ Center + widen the whole hero on desktop */
 .stage-inner {
   position: relative;
   z-index: 2;
-  width: min(1240px, 92vw);
+  width: min(1440px, 96vw);
+  margin: 0 auto;
+  padding: 0 clamp(12px, 2vw, 28px);
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(1.25rem, 4vw, 3rem);
+  grid-template-columns: minmax(320px, 520px) minmax(360px, 1fr);
+  gap: clamp(1.25rem, 3.6vw, 3rem);
   align-items: center;
 }
 
@@ -48,11 +38,23 @@
   justify-content: center;
 }
 
+/* Portrait container */
+.stage-portrait-frame {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ✅ CSS composes crop offset + parallax */
 .stage-portrait-wrap {
   position: relative;
-  width: min(560px, 46vw);
-  max-width: 560px;
+  width: 100%;
   will-change: transform;
+
+  --portrait-offset-y: 0px;
+  --portrait-parallax-y: 0px;
+
+  transform: translate3d(0, var(--portrait-offset-y), 0)
+    translate3d(0, var(--portrait-parallax-y), 0);
 }
 
 .stage-foreground {
@@ -83,7 +85,7 @@
 }
 
 .stage-copy {
-  max-width: 520px;
+  max-width: 640px;
 }
 
 .stage-kicker {
@@ -96,7 +98,7 @@
 
 .stage-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 3.8vw, 3.25rem);
+  font-size: clamp(2.1rem, 3.6vw, 3.25rem);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-primary);
@@ -109,6 +111,7 @@
   color: rgba(255, 255, 255, 0.78);
   line-height: 1.65;
   font-size: 1.02rem;
+  max-width: 52ch;
 }
 
 /* Ticket CTAs */
@@ -124,18 +127,15 @@
   min-width: 220px;
   padding: 0.95rem 1.05rem;
   border-radius: 16px;
-
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.06),
     rgba(255, 255, 255, 0.03)
   );
-
   color: rgba(255, 255, 255, 0.92);
   cursor: pointer;
   text-align: left;
-
   transition: transform 0.18s ease, border 0.18s ease, background 0.18s ease;
   overflow: hidden;
 }
@@ -205,32 +205,27 @@
   );
 }
 
-/* Mobile */
-@media (max-width: 860px) {
-  .stage-hero {
-    align-items: flex-start;
-  }
+/* ============================
+   RESPONSIVE
+============================ */
 
+/* Stack on smaller laptops / tablets */
+@media (max-width: 1080px) {
   .stage-inner {
     grid-template-columns: 1fr;
-    padding: 1.05rem 0 3.5rem;
-  }
+    justify-items: center;
+    text-align: center;
 
-  .stage-left {
-    padding-top: 22px;
-  }
-
-  .stage-portrait-wrap {
-    width: min(560px, 90vw);
+    /* ✅ REMOVED the accidental margin-top: 300px */
   }
 
   .stage-right {
     justify-content: center;
-    text-align: center;
   }
 
-  .stage-copy {
-    max-width: 560px;
+  .stage-blurb {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .stage-cta {
@@ -238,9 +233,7 @@
   }
 
   .ticket-btn {
-    width: min(520px, 88vw);
     text-align: center;
-    min-width: 0;
   }
 
   .stage-quote {
@@ -250,5 +243,44 @@
   .stage-quote-line {
     width: 120px;
     margin: 0 auto;
+  }
+}
+
+/* Mobile crop band */
+@media (max-width: 860px) {
+  .stage-hero {
+    align-items: flex-start;
+  }
+
+  .stage-left {
+    padding-top: 18px;
+  }
+
+  .stage-portrait-frame {
+    width: min(560px, 92vw);
+    max-width: 560px;
+    max-height: 260px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .stage-portrait-wrap {
+    --portrait-offset-y: -28px;
+  }
+
+  .ticket-btn {
+    width: min(520px, 88vw);
+    min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .stage-portrait-frame {
+    max-height: 230px;
+  }
+
+  .stage-portrait-wrap {
+    --portrait-offset-y: -18px;
   }
 }

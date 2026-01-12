@@ -12,39 +12,43 @@ export default function StageHero() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => setScrollY(window.scrollY || 0));
     };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
-  const transforms = useMemo(() => {
+  // ✅ DO NOT set inline transform (it overrides your CSS crop rules).
+  // Instead, feed parallax into a CSS variable that CSS composes with offsets.
+  const styleVars = useMemo(() => {
     const fg = Math.min(scrollY * 0.18, 95);
-    return {
-      fgTransform: `translate3d(0, ${fg * -0.15}px, 0)`,
-    };
+    const parallaxPx = fg * -0.15;
+    return { "--portrait-parallax-y": `${parallaxPx}px` };
   }, [scrollY]);
 
   return (
     <section className="stage-hero" id="home">
       <div className="stage-inner">
+        {/* Left */}
         <div className="stage-left">
-          <div
-            className="stage-portrait-wrap"
-            style={{ transform: transforms.fgTransform }}
-          >
-            <img
-              src={mainImg}
-              alt="Tawnya Reynolds performing"
-              className="stage-foreground"
-              draggable="false"
-            />
-            <div className="stage-portrait-shadow" />
+          <div className="stage-portrait-frame">
+            <div className="stage-portrait-wrap" style={styleVars}>
+              <img
+                src={mainImg}
+                alt="Tawnya Reynolds performing"
+                className="stage-foreground"
+                draggable="false"
+              />
+              <div className="stage-portrait-shadow" />
+            </div>
           </div>
         </div>
 
+        {/* Right */}
         <div className="stage-right">
           <div className="stage-copy">
             <div className="stage-kicker">Songwriter · Nashville</div>

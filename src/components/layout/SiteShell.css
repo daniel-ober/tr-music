@@ -1,63 +1,129 @@
 /* src/components/layout/SiteShell.css */
-@import "../../styles/theme.css";
+
+:root {
+  --route-fade-ms: 220ms;
+  --route-ease: ease;
+}
 
 .site-shell {
   position: relative;
   min-height: 100vh;
-  width: 100%;
   overflow-x: hidden;
-
-  display: flex;
-  flex-direction: column;
 }
 
-/* Full app background canvas */
-.site-bg {
+/* =========================
+   Background layers
+   ========================= */
+
+.site-bg-img {
   position: fixed;
   inset: 0;
   z-index: 0;
+
+  background-position: center top;
   background-size: cover;
-  background-position: center;
-  filter: grayscale(100%) brightness(0.32) contrast(1.12);
+  background-repeat: no-repeat;
+
+  will-change: transform;
+  transform-origin: center top;
+
+  filter: saturate(1.02) contrast(1.02);
 }
 
-/* Dark stage vignette */
-.site-vignette {
-  position: absolute;
+.site-bg-glow {
+  position: fixed;
   inset: 0;
-  background: radial-gradient(
-    circle at 46% 44%,
-    rgba(255, 255, 255, 0.06),
-    rgba(0, 0, 0, 0.82) 58%,
-    rgba(0, 0, 0, 0.95) 100%
-  );
-}
-
-/* Film grain */
-.site-grain {
-  position: absolute;
-  inset: 0;
-  opacity: 0.12;
-  background-image: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.02) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
-/* Foreground app */
-.site-content {
-  position: relative;
   z-index: 1;
+  pointer-events: none;
 
+  background: radial-gradient(
+      800px 500px at 50% 20%,
+      rgba(255, 255, 255, 0.08),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+      900px 600px at 30% 60%,
+      rgba(120, 160, 255, 0.06),
+      rgba(0, 0, 0, 0)
+    );
+}
+
+.site-bg-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background: radial-gradient(
+    1200px 800px at 50% 30%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+}
+
+/* =========================
+   Foreground layout
+   ========================= */
+
+.site-foreground {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-main {
+  width: 100%;
   flex: 1;
+}
 
-  /* ✅ single source of truth: offset all page content below fixed navbar */
-  padding-top: var(--nav-h, 92px);
+.site-footer {
+  width: 100%;
+}
 
-  min-height: 0;
+/* =========================
+   Route transitions (no flicker)
+   ========================= */
+
+/*
+  Key idea:
+  - The route content always lives inside .route-layer
+  - We animate via transitions (not keyframe-on-mount)
+  - On navigation: set .is-hidden (opacity 0), then swap content, then set .is-visible
+*/
+
+.route-layer {
+  /* Prevent “flash then hide”: start hidden until JS sets visible */
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(2px);
+
+  transition:
+    opacity var(--route-fade-ms) var(--route-ease),
+    transform var(--route-fade-ms) var(--route-ease),
+    filter var(--route-fade-ms) var(--route-ease);
+
+  will-change: opacity, transform, filter;
+}
+
+.route-layer.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.route-layer.is-hidden {
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-layer {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }

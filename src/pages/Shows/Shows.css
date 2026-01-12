@@ -1,0 +1,115 @@
+/* src/pages/Shows/Shows.css */
+/* NOTE: theme.css is imported globally in src/index.css */
+
+.shows-page {
+  width: 100%;
+  min-height: calc(100svh - var(--nav-h));
+  padding: 26px 0 80px;
+}
+
+.shows-wrap {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.shows-head {
+  margin-bottom: 14px;
+}
+
+.shows-title {
+  margin: 0 0 8px;
+  font-family: var(--font-heading);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.05rem;
+}
+
+.shows-sub {
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.5;
+}
+
+.shows-table {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.shows-row {
+  display: grid;
+  grid-template-columns: 1.25fr 0.7fr 1fr;
+  gap: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.shows-row--head {
+  border-top: 0;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.shows-cell {
+  padding: 12px 14px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92rem;
+}
+
+.shows-row--head .shows-cell {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.shows-date {
+  font-weight: 600;
+}
+
+.shows-footer {
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+}
+
+.shows-booking {
+  width: min(720px, 100%);
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.shows-booking:hover {
+  border-color: rgba(201, 162, 93, 0.35);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 860px) {
+  .shows-page {
+    padding: 18px 0 70px;
+  }
+
+  .shows-row {
+    grid-template-columns: 1fr;
+  }
+
+  .shows-row--head {
+    display: none;
+  }
+
+  .shows-cell {
+    padding: 12px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .shows-cell:first-child {
+    border-top: 0;
+  }
+}

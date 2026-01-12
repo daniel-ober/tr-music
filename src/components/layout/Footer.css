@@ -1,5 +1,4 @@
 /* src/components/layout/Footer.css */
-@import "../../styles/theme.css";
 
 .site-footer {
   margin-top: auto;
@@ -72,7 +71,7 @@
 .footer-icon:hover {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  /* border-color: rgba(255, 255, 255, 0.2); */
   color: rgba(255, 255, 255, 0.92);
 }
 
