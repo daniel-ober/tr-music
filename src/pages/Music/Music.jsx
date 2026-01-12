@@ -1,4 +1,3 @@
-// src/pages/Music/Music.jsx
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Music.css";
@@ -9,6 +8,7 @@ import coverWateringDeadFlowers from "../../assets/albums/watering_dead_flowers.
 
 const ALBUMS = [
   {
+    id: "standing-in-the-rain",
     title: "Standing In The Rain",
     subtitle: "Tawnya Reynolds",
     cover: coverStandingInTheRain,
@@ -25,6 +25,7 @@ const ALBUMS = [
     ],
   },
   {
+    id: "8-track",
     title: "8 Track",
     subtitle: "Tawnya Reynolds",
     cover: cover8Track,
@@ -39,6 +40,7 @@ const ALBUMS = [
     ],
   },
   {
+    id: "watering-dead-flowers",
     title: "Watering Dead Flowers",
     subtitle: "Tawnya Reynolds",
     cover: coverWateringDeadFlowers,
@@ -80,9 +82,99 @@ function fallbackCover(e) {
     `);
 }
 
+function makeAlbumTrackObjects(albums) {
+  // Normalize into an array of track objects the GlobalPlayer understands
+  const catalog = [];
+  const byAlbum = new Map();
+
+  for (const a of albums) {
+    const albumId = a.id || a.title;
+    const albumTitle = a.title;
+    const albumArtist = a.subtitle || "Tawnya Reynolds";
+    const coverSrc = a.cover;
+
+    const tracks = (a.tracks || []).map((trackTitle, idx) => {
+      const t = {
+        trackId: `${albumId}::${idx + 1}`,
+        albumId,
+        albumTitle,
+        albumArtist,
+        coverSrc,
+        trackTitle,
+        trackNumber: idx + 1,
+      };
+      catalog.push(t);
+      return t;
+    });
+
+    byAlbum.set(albumId, tracks);
+  }
+
+  return { catalog, byAlbum };
+}
+
+function dispatchLoadToPlayer({ album, trackObj, albumTracks, catalogTracks }) {
+  window.dispatchEvent(
+    new CustomEvent("tr:player:load", {
+      detail: {
+        albumTitle: album.title,
+        albumArtist: album.subtitle || "Tawnya Reynolds",
+        trackTitle: trackObj.trackTitle,
+        coverSrc: album.cover,
+        albumId: album.id || album.title,
+        trackId: trackObj.trackId || trackObj.trackTitle,
+        albumTracks,
+        catalogTracks,
+      },
+    })
+  );
+}
+
 export default function Music() {
   const navigate = useNavigate();
   const albums = useMemo(() => ALBUMS, []);
+
+  const { catalog, byAlbum } = useMemo(
+    () => makeAlbumTrackObjects(albums),
+    [albums]
+  );
+
+  function onClickTrack(album, trackTitle, idx) {
+    const albumId = album.id || album.title;
+    const albumTracks = byAlbum.get(albumId) || [];
+    const trackObj = albumTracks[idx] ||
+      albumTracks.find((t) => t.trackTitle === trackTitle) || {
+        trackId: `${albumId}::${idx + 1}`,
+        albumId,
+        albumTitle: album.title,
+        albumArtist: album.subtitle || "Tawnya Reynolds",
+        coverSrc: album.cover,
+        trackTitle,
+        trackNumber: idx + 1,
+      };
+
+    dispatchLoadToPlayer({
+      album,
+      trackObj,
+      albumTracks,
+      catalogTracks: catalog,
+    });
+  }
+
+  function onAlbumListen(album) {
+    // “Listen” loads the first track (or keeps current if that album is already loaded).
+    const albumId = album.id || album.title;
+    const albumTracks = byAlbum.get(albumId) || [];
+    const first = albumTracks[0];
+    if (!first) return;
+
+    dispatchLoadToPlayer({
+      album,
+      trackObj: first,
+      albumTracks,
+      catalogTracks: catalog,
+    });
+  }
 
   return (
     <main className="music-page">
@@ -126,7 +218,11 @@ export default function Music() {
                   <div className="album-sub">{a.subtitle}</div>
 
                   <div className="album-actions" aria-label="Album actions">
-                    <button className="album-pill" type="button">
+                    <button
+                      className="album-pill"
+                      type="button"
+                      onClick={() => onAlbumListen(a)}
+                    >
                       Listen
                     </button>
                     <button className="album-pill" type="button">
@@ -154,21 +250,25 @@ export default function Music() {
                 </div>
 
                 {a.tracks.map((t, idx) => (
-                  <div key={`${a.title}-${t}`} className="track-row" role="row">
-                    <div className="tracks-col tracks-num" role="cell">
+                  <button
+                    key={`${a.title}-${t}`}
+                    className="track-row"
+                    type="button"
+                    onClick={() => onClickTrack(a, t, idx)}
+                    aria-label={`Load ${t} from ${a.title}`}
+                  >
+                    <div className="tracks-col tracks-num">
                       {String(idx + 1).padStart(2, "0")}
                     </div>
 
-                    <div className="tracks-col tracks-name" role="cell">
-                      {t}
-                    </div>
+                    <div className="tracks-col tracks-name">{t}</div>
 
-                    <div className="tracks-col tracks-price" role="cell">
-                      <button className="price-btn" type="button">
+                    <div className="tracks-col tracks-price">
+                      <span className="price-btn" aria-hidden="true">
                         Your Price
-                      </button>
+                      </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </article>

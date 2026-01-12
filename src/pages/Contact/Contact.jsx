@@ -150,11 +150,6 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-
-            <div className="contact-note">
-              Prefer email? Include your <strong>event date</strong>,{" "}
-              <strong>venue</strong>, and <strong>set length</strong>.
-            </div>
           </aside>
 
           {/* RIGHT: FORM */}

@@ -14,6 +14,10 @@
   flex: 1;
   width: 100%;
   padding-top: var(--nav-h);
+
+  /* ✅ Reserve room for the sticky player (collapsed/expanded set dynamically) */
+  padding-bottom: var(--player-h, 92px);
+
   will-change: opacity, transform, filter;
 }
 

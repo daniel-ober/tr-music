@@ -90,12 +90,12 @@ export default function Footer() {
             <a className="footer-icon" href="#" aria-label="YouTube">
               <IconYouTube />
             </a>
-            <a className="footer-icon" href="#" aria-label="Spotify">
+            {/* <a className="footer-icon" href="#" aria-label="Spotify">
               <IconSpotify />
             </a>
             <a className="footer-icon" href="#" aria-label="Apple Music">
               <IconAppleMusic />
-            </a>
+            </a> */}
           </div>
         </div>
 
